@@ -74,7 +74,7 @@ function useReveal(rm, options = {}) {
   const { x = 0, y = 30 } = options
   return useMemo(
     () => ({
-      hidden: rm ? { opacity: 1 } : { opacity: 0, x, y },
+      hidden: { opacity: 1, x: 0, y: 0 },
       show: (delay = 0) =>
         rm
           ? { opacity: 1 }
@@ -156,9 +156,6 @@ export default function App() {
       {/* ── Header ── */}
       <motion.header
         className="li-header"
-        initial={rm ? false : { opacity: 0, y: -18 }}
-        animate={rm ? undefined : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: EASE }}
       >
         <div className="li-container li-header-inner">
           <a className="li-brand" href="#home" aria-label="Lake Island home">
@@ -246,12 +243,7 @@ export default function App() {
           </motion.div>
 
           {/* Stats strip */}
-          <motion.div
-            className="li-hero-stats"
-            initial={rm ? false : { opacity: 0, y: 16 }}
-            animate={rm ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.9, ease: EASE }}
-          >
+          <motion.div className="li-hero-stats">
             <div className="li-container li-stats-inner">
               {stats.map((s, i) => (
                 <React.Fragment key={s.label}>
@@ -479,13 +471,7 @@ export default function App() {
       </main>
 
       {/* ── Footer ── */}
-      <motion.footer
-        className="li-footer"
-        initial={rm ? false : { opacity: 0 }}
-        whileInView={rm ? undefined : { opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: EASE }}
-      >
+      <motion.footer className="li-footer">
         <div className="li-container li-footer-inner">
           <div className="li-footer-brand">
             <span className="li-brand-mark li-brand-mark-sm" aria-hidden="true">
@@ -501,3 +487,4 @@ export default function App() {
     </div>
   )
 }
+/* __CODEX_PROBE_SRC_APP__ */
