@@ -1,0 +1,41 @@
+<svg width="428" height="242" viewBox="0 0 428 242" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="428" height="242" fill="#D8CFB9"/>
+  <rect width="428" height="242" fill="url(#paint0_linear_200_1)" fill-opacity="0.58"/>
+  <ellipse cx="132" cy="62" rx="86" ry="40" fill="#F4E7BE" fill-opacity="0.58"/>
+  <ellipse cx="300" cy="79" rx="92" ry="52" fill="#F3DFAD" fill-opacity="0.48"/>
+  <circle cx="160" cy="78" r="24" fill="#CD9B79"/>
+  <path d="M122 69C122 55.7452 132.745 45 146 45H172C185.255 45 196 55.7452 196 69V73H122V69Z" fill="#40322C"/>
+  <path d="M123 206V117C123 96.5655 139.565 80 160 80C180.435 80 197 96.5655 197 117V206H123Z" fill="#F1E8DC"/>
+  <path d="M137 206L144 139H162L158 206H137Z" fill="#D39269"/>
+  <path d="M165 206L161 140H181L187 206H165Z" fill="#D9B84C"/>
+  <circle cx="255" cy="82" r="24" fill="#C98D66"/>
+  <path d="M219 74C219 60.7452 229.745 50 243 50H268C281.255 50 292 60.7452 292 74V78H219V74Z" fill="#6A4B3B"/>
+  <path d="M216 206V118C216 97.5655 232.565 81 253 81H258C278.435 81 295 97.5655 295 118V206H216Z" fill="#B77759"/>
+  <path d="M229 206L236 140H255L252 206H229Z" fill="#EFE3D5"/>
+  <path d="M258 206L254 141H274L280 206H258Z" fill="#2F3C49"/>
+  <g fill="#E5B93D" fill-opacity="0.92">
+    <circle cx="49" cy="194" r="18"/>
+    <circle cx="80" cy="184" r="14"/>
+    <circle cx="102" cy="201" r="16"/>
+    <circle cx="315" cy="198" r="20"/>
+    <circle cx="347" cy="186" r="16"/>
+    <circle cx="374" cy="201" r="18"/>
+  </g>
+  <g fill="#C76C7A" fill-opacity="0.9">
+    <circle cx="62" cy="201" r="9"/>
+    <circle cx="329" cy="206" r="9"/>
+    <circle cx="95" cy="192" r="8"/>
+    <circle cx="359" cy="194" r="8"/>
+  </g>
+  <rect y="204" width="428" height="38" fill="url(#paint1_linear_200_1)" fill-opacity="0.24"/>
+  <defs>
+    <linearGradient id="paint0_linear_200_1" x1="214" y1="0" x2="214" y2="242" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFE8D6"/>
+      <stop offset="1" stop-color="#B79E89"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_200_1" x1="214" y1="204" x2="214" y2="242" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D1116" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0D1116"/>
+    </linearGradient>
+  </defs>
+</svg>
