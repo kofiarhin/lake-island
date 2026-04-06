@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import heroPoster from './assets/hero.png'
-import heroVideo from '../brand_assets/hero_bg.mp4'
+import heroVideo from './assets/fireplace.mp4'
+import image1 from './assets/image-1.jpg'
+import image2 from './assets/image-2.jpg'
+import image3 from './assets/image-3.jpg'
+import image4 from './assets/image-4.jpg'
 import './header-overrides.css'
 
 const stats = [
@@ -34,18 +38,28 @@ const collections = [
     tone: 'Smoked oak cabinetry, veined stone and seamless integrated storage.',
     accent: 'rgba(208, 167, 106, 0.36)',
     tag: 'Signature',
+    image: image1,
   },
   {
     name: 'The Atelier',
     tone: 'Soft matte finishes, sculpted islands and warm metallic detailing.',
     accent: 'rgba(132, 172, 187, 0.3)',
     tag: 'Modern',
+    image: image2,
   },
   {
     name: 'The Residence',
     tone: 'Statement entertaining spaces with gallery-like restraint and depth.',
     accent: 'rgba(134, 122, 176, 0.28)',
     tag: 'Bespoke',
+    image: image3,
+  },
+  {
+    name: 'The Sanctuary',
+    tone: 'Warm, layered detailing with a sculptural silhouette and a softer contemporary finish.',
+    accent: 'rgba(170, 138, 112, 0.32)',
+    tag: 'Curated',
+    image: image4,
   },
 ]
 
@@ -340,7 +354,9 @@ export default function App() {
                   custom={i * 0.08}
                   whileHover={cardHover}
                 >
-                  <div className="li-collection-art" />
+                  <div className="li-collection-art">
+                    <img src={c.image} alt={c.name} className="li-collection-image" loading="lazy" />
+                  </div>
                   <div className="li-collection-body">
                     <span className="li-card-tag">{c.tag}</span>
                     <h3>{c.name}</h3>
