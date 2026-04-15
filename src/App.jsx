@@ -1,17 +1,27 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import heroPoster from './assets/hero.png'
-import heroVideo from './assets/fireplace.mp4'
+import heroVideo from './assets/bedroom.mp4'
 import image1 from './assets/image-1.jpg'
 import image2 from './assets/image-2.jpg'
 import image3 from './assets/image-3.jpg'
 import image4 from './assets/image-4.jpg'
 import './header-overrides.css'
 
+gsap.registerPlugin(ScrollTrigger)
+
 const stats = [
-  { value: '18+', label: 'years crafting bespoke kitchens' },
-  { value: '240', label: 'tailored projects delivered' },
-  { value: '6 weeks', label: 'from brief to concept presentation' },
+  { value: 18, suffix: '+', label: 'years crafting bespoke kitchens' },
+  { value: 240, suffix: '', label: 'tailored projects delivered' },
+  { value: 6, suffix: ' weeks', label: 'from brief to concept presentation' },
+]
+
+const heroHeadline = [
+  'Create a home',
+  'that feels architectural,',
+  'effortless and unmistakably yours.',
 ]
 
 const highlights = [
@@ -83,6 +93,10 @@ const process = [
 
 const EASE = [0.22, 1, 0.36, 1]
 const VIEWPORT = { once: true, amount: 0.18 }
+
+function formatStatValue(value, suffix = '') {
+  return `${value}${suffix}`
+}
 
 function useReveal(rm, options = {}) {
   const { x = 0, y = 30 } = options
@@ -162,6 +176,126 @@ export default function App() {
   const btnHover = rm ? undefined : { y: -3, scale: 1.01, transition: { duration: 0.26, ease: EASE } }
   const cardHover = rm ? undefined : { y: -7, transition: { duration: 0.3, ease: EASE } }
 
+  useLayoutEffect(() => {
+    if (rm || !heroRef.current) return undefined
+
+    const ctx = gsap.context(() => {
+      const q = gsap.utils.selector(heroRef)
+      const intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+      gsap.fromTo(
+        q('.li-hero-video'),
+        { scale: 1.16, filter: 'saturate(0.85) brightness(0.72) contrast(1.02)' },
+        {
+          scale: 1,
+          filter: 'saturate(1) brightness(0.9) contrast(1.03)',
+          duration: 1.8,
+          ease: 'power2.out',
+        },
+      )
+
+      intro
+        .from(q('.li-hero-panel'), { y: 48, opacity: 0, filter: 'blur(18px)', duration: 1.1 }, 0.1)
+        .from(q('.li-eyebrow'), { y: 18, opacity: 0, duration: 0.7 }, 0.18)
+        .from(
+          q('.li-hero-line-inner'),
+          {
+            yPercent: 115,
+            rotate: 3,
+            transformOrigin: '0% 100%',
+            duration: 1.08,
+            stagger: 0.12,
+          },
+          0.2,
+        )
+        .from(q('.li-hero-lead'), { y: 24, opacity: 0, filter: 'blur(8px)', duration: 0.78 }, 0.52)
+        .from(q('.li-hero-actions > *'), { y: 20, opacity: 0, duration: 0.68, stagger: 0.1 }, 0.68)
+        .from(q('.li-stat'), { y: 24, opacity: 0, duration: 0.72, stagger: 0.1 }, 0.9)
+        .from(
+          q('.li-stat-rule'),
+          { scaleY: 0, transformOrigin: 'center top', duration: 0.55, stagger: 0.08 },
+          0.98,
+        )
+        .from(q('.li-scroll-cue'), { y: 12, opacity: 0, duration: 0.6 }, 1)
+
+      q('.li-stat strong').forEach((node, index) => {
+        const endValue = Number(node.dataset.countupEnd || 0)
+        const suffix = node.dataset.countupSuffix || ''
+        const counter = { value: 0 }
+
+        intro.to(
+          counter,
+          {
+            value: endValue,
+            duration: 1.35,
+            ease: 'power2.out',
+            onUpdate: () => {
+              node.textContent = `${Math.round(counter.value)}${suffix}`
+            },
+          },
+          0.98 + index * 0.08,
+        )
+      })
+
+      gsap.to(q('.li-hero-orb-1'), {
+        x: 26,
+        y: -24,
+        duration: 8.2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+      gsap.to(q('.li-hero-orb-2'), {
+        x: -18,
+        y: 20,
+        duration: 9.4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+      gsap.to(q('.li-hero-orb-3'), {
+        x: 16,
+        y: -16,
+        duration: 7.6,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      })
+      gsap.to(q('.li-hero-grid'), {
+        backgroundPosition: '140px 0px',
+        duration: 18,
+        repeat: -1,
+        ease: 'none',
+      })
+      gsap.to(q('.li-hero-shimmer'), {
+        xPercent: 145,
+        duration: 2.8,
+        repeat: -1,
+        repeatDelay: 1.8,
+        ease: 'sine.inOut',
+      })
+      gsap.fromTo(
+        q('.li-scroll-cue-line span'),
+        { yPercent: -115 },
+        { yPercent: 145, duration: 1.45, ease: 'power1.inOut', repeat: -1 },
+      )
+
+      const scrollConfig = {
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+      }
+
+      gsap.to(q('.li-hero-panel'), { y: -30, scrollTrigger: scrollConfig })
+      gsap.to(q('.li-hero-grid'), { yPercent: -12, opacity: 0.58, scrollTrigger: scrollConfig })
+      gsap.to(q('.li-hero-spotlight'), { xPercent: 16, yPercent: -10, scrollTrigger: scrollConfig })
+      gsap.to(q('.li-hero-stats'), { yPercent: -18, scrollTrigger: scrollConfig })
+    }, heroRef)
+
+    return () => ctx.revert()
+  }, [rm])
+
   return (
     <div className="li-shell">
       <div className="li-glow li-glow-gold" aria-hidden="true" />
@@ -219,41 +353,62 @@ export default function App() {
             >
               <source src={heroVideo} type="video/mp4" />
             </video>
+            <div className="li-hero-ambient">
+              <div className="li-hero-grid" />
+              <div className="li-hero-spotlight" />
+              <span className="li-hero-orb li-hero-orb-1" />
+              <span className="li-hero-orb li-hero-orb-2" />
+              <span className="li-hero-orb li-hero-orb-3" />
+              <div className="li-hero-shimmer" />
+            </div>
             <div className="li-hero-scrim" />
           </motion.div>
 
           <motion.div className="li-container li-hero-content" style={{ y: copyY }}>
-            <motion.div variants={stagger} initial="hidden" animate="show">
-              <motion.span className="li-eyebrow" variants={fadeUp} custom={0.1}>
-                Luxury kitchen design, distilled
-              </motion.span>
-              <motion.h1 variants={fadeUp} custom={0.22}>
-                Create a home that feels architectural, effortless and unmistakably yours.
-              </motion.h1>
-              <motion.p className="li-hero-lead" variants={fadeUpSoft} custom={0.36}>
-                Lake Island designs premium kitchens and living spaces with a modern, gallery-like
-                calm — tailored around materials, light and beautifully considered function.
-              </motion.p>
-              <motion.div className="li-hero-actions" variants={fadeUpSoft} custom={0.48}>
-                <motion.a
-                  className="li-button li-button-solid"
-                  href="#collections"
-                  whileHover={btnHover}
-                  whileTap={rm ? undefined : { scale: 0.99 }}
-                >
-                  Explore Signature Spaces
-                  <ArrowIcon />
-                </motion.a>
-                <motion.a
-                  className="li-button li-button-ghost-light"
-                  href="#process"
-                  whileHover={btnHover}
-                  whileTap={rm ? undefined : { scale: 0.99 }}
-                >
-                  View Our Process
-                </motion.a>
+            <div className="li-hero-copy-wrap">
+              <motion.div className="li-hero-panel" variants={stagger} initial="hidden" animate="show">
+                <motion.span className="li-eyebrow" variants={fadeUp} custom={0.1}>
+                  Luxury kitchen design, distilled
+                </motion.span>
+                <motion.h1 variants={fadeUp} custom={0.22}>
+                  {heroHeadline.map((line) => (
+                    <span key={line} className="li-hero-line">
+                      <span className="li-hero-line-inner">{line}</span>
+                    </span>
+                  ))}
+                </motion.h1>
+                <motion.p className="li-hero-lead" variants={fadeUpSoft} custom={0.36}>
+                  Lake Island designs premium kitchens and living spaces with a modern, gallery-like
+                  calm — tailored around materials, light and beautifully considered function.
+                </motion.p>
+                <motion.div className="li-hero-actions" variants={fadeUpSoft} custom={0.48}>
+                  <motion.a
+                    className="li-button li-button-solid"
+                    href="#collections"
+                    whileHover={btnHover}
+                    whileTap={rm ? undefined : { scale: 0.99 }}
+                  >
+                    Explore Signature Spaces
+                    <ArrowIcon />
+                  </motion.a>
+                  <motion.a
+                    className="li-button li-button-ghost-light"
+                    href="#process"
+                    whileHover={btnHover}
+                    whileTap={rm ? undefined : { scale: 0.99 }}
+                  >
+                    View Our Process
+                  </motion.a>
+                </motion.div>
               </motion.div>
-            </motion.div>
+
+              <div className="li-scroll-cue" aria-hidden="true">
+                <span className="li-scroll-cue-label">Scroll</span>
+                <span className="li-scroll-cue-line">
+                  <span />
+                </span>
+              </div>
+            </div>
           </motion.div>
 
           {/* Stats strip */}
@@ -262,7 +417,9 @@ export default function App() {
               {stats.map((s, i) => (
                 <React.Fragment key={s.label}>
                   <div className="li-stat">
-                    <strong>{s.value}</strong>
+                    <strong data-countup-end={s.value} data-countup-suffix={s.suffix}>
+                      {formatStatValue(s.value, s.suffix)}
+                    </strong>
                     <span>{s.label}</span>
                   </div>
                   {i < stats.length - 1 && <div className="li-stat-rule" aria-hidden="true" />}
