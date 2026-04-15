@@ -103,7 +103,15 @@ function SideNav({ isOpen, onClose, links, returnFocusRef }) {
               </Link>
 
               <button type="button" className="li-side-nav-close" onClick={onClose} aria-label="Close menu">
-                <span aria-hidden="true">✕</span>
+                <svg
+                  aria-hidden="true"
+                  className="li-side-nav-close-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path d="M6 6L18 18" />
+                  <path d="M18 6L6 18" />
+                </svg>
               </button>
             </div>
 
