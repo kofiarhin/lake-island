@@ -1,13 +1,11 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import heroPoster from '../assets/hero.png'
 import heroVideo from '../assets/bedroom.mp4'
-import image1 from '../assets/image-1.jpg'
-import image2 from '../assets/image-2.jpg'
-import image3 from '../assets/image-3.jpg'
-import image4 from '../assets/image-4.jpg'
+import CollectionModal from '../components/CollectionModal'
+import { collectionsContent } from '../data/collectionsContent'
 import '../header-overrides.css'
 
 void motion
@@ -41,37 +39,6 @@ const highlights = [
     num: '03',
     title: 'White-Glove Delivery',
     copy: 'A tightly managed journey from first sketch to final installation, with craftsmanship at the centre.',
-  },
-]
-
-const collections = [
-  {
-    name: 'The Peninsula',
-    tone: 'Smoked oak cabinetry, veined stone and seamless integrated storage.',
-    accent: 'rgba(208, 167, 106, 0.36)',
-    tag: 'Signature',
-    image: image1,
-  },
-  {
-    name: 'The Atelier',
-    tone: 'Soft matte finishes, sculpted islands and warm metallic detailing.',
-    accent: 'rgba(132, 172, 187, 0.3)',
-    tag: 'Modern',
-    image: image2,
-  },
-  {
-    name: 'The Residence',
-    tone: 'Statement entertaining spaces with gallery-like restraint and depth.',
-    accent: 'rgba(134, 122, 176, 0.28)',
-    tag: 'Bespoke',
-    image: image3,
-  },
-  {
-    name: 'The Sanctuary',
-    tone: 'Warm, layered detailing with a sculptural silhouette and a softer contemporary finish.',
-    accent: 'rgba(170, 138, 112, 0.32)',
-    tag: 'Curated',
-    image: image4,
   },
 ]
 
@@ -163,6 +130,7 @@ export default function LandingPage() {
 
   const rm = useReducedMotion()
   const heroRef = useRef(null)
+  const [selectedCollection, setSelectedCollection] = useState(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
 
   const videoY = useTransform(scrollYProgress, [0, 1], rm ? [0, 0] : [0, 80])
@@ -462,23 +430,35 @@ export default function LandingPage() {
               whileInView="show"
               viewport={VIEWPORT}
             >
-              {collections.map((c, i) => (
+              {collectionsContent.map((collection, i) => (
                 <motion.article
-                  key={c.name}
+                  key={collection.id}
                   className="li-collection-card"
-                  style={{ '--accent': c.accent }}
+                  style={{ '--accent': collection.accent }}
                   variants={fadeUpSoft}
                   custom={i * 0.08}
                   whileHover={cardHover}
                 >
-                  <div className="li-collection-art">
-                    <img src={c.image} alt={c.name} className="li-collection-image" loading="lazy" />
-                  </div>
-                  <div className="li-collection-body">
-                    <span className="li-card-tag">{c.tag}</span>
-                    <h3>{c.name}</h3>
-                    <p>{c.tone}</p>
-                  </div>
+                  <button
+                    type="button"
+                    className="li-collection-trigger"
+                    onClick={() => setSelectedCollection(collection)}
+                    aria-label={`Open ${collection.name} collection details`}
+                  >
+                    <div className="li-collection-art">
+                      <img
+                        src={collection.image}
+                        alt={collection.name}
+                        className="li-collection-image"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="li-collection-body">
+                      <span className="li-card-tag">{collection.tag}</span>
+                      <h3>{collection.name}</h3>
+                      <p>{collection.tone}</p>
+                    </div>
+                  </button>
                 </motion.article>
               ))}
             </motion.div>
@@ -601,6 +581,7 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </section>
+        <CollectionModal item={selectedCollection} onClose={() => setSelectedCollection(null)} />
       </main>
   )
 }
