@@ -1,12 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-
-const primaryLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'Gallery', to: '/gallery' },
-  { label: 'Collections', to: '/#collections' },
-  { label: 'Process', to: '/#process' },
-  { label: 'Contact', to: '/#contact' },
-]
+import SideNav, { PANEL_ID } from './SideNav'
+import { primaryLinks } from '../data/navigationLinks'
 
 function renderLink(link) {
   if (link.to === '/' || link.to === '/gallery') {
@@ -30,8 +25,29 @@ function renderLink(link) {
 }
 
 function SiteHeader() {
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const triggerRef = useRef(null)
+
+  const openNav = () => setIsNavOpen(true)
+  const closeNav = () => setIsNavOpen(false)
+
+  useEffect(() => {
+    const closeOnDesktop = () => {
+      if (window.matchMedia('(min-width: 1025px)').matches) {
+        closeNav()
+      }
+    }
+
+    closeOnDesktop()
+    window.addEventListener('resize', closeOnDesktop)
+
+    return () => {
+      window.removeEventListener('resize', closeOnDesktop)
+    }
+  }, [])
+
   return (
-    <header className="li-header">
+    <header className="li-header" data-ui-header="true">
       <div className="li-container li-header-inner">
         <Link className="li-brand" to="/" aria-label="Lake Island home">
           <span className="li-brand-mark">LI</span>
@@ -45,9 +61,25 @@ function SiteHeader() {
           {primaryLinks.map(renderLink)}
         </nav>
 
-        <Link className="li-button li-button-ghost" to="/#contact">
+        <Link className="li-button li-button-ghost li-header-cta" to="/#contact">
           Book Consultation
         </Link>
+
+        <button
+          ref={triggerRef}
+          type="button"
+          className="li-nav-toggle"
+          onClick={openNav}
+          aria-expanded={isNavOpen}
+          aria-controls={PANEL_ID}
+          aria-label="Open navigation menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <SideNav isOpen={isNavOpen} onClose={closeNav} links={primaryLinks} returnFocusRef={triggerRef} />
       </div>
     </header>
   )

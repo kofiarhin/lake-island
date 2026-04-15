@@ -26,12 +26,14 @@ function ScrollToHash() {
 }
 
 function AppShell() {
+  const location = useLocation()
+
   return (
     <div className="li-shell">
       <div className="li-glow li-glow-gold" aria-hidden="true" />
       <div className="li-glow li-glow-blue" aria-hidden="true" />
       <ScrollToHash />
-      <SiteHeader />
+      <SiteHeader key={`${location.pathname}${location.hash}`} />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
